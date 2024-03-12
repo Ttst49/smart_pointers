@@ -8,6 +8,16 @@ enum List{
     Nil,
 }
 
+struct MyPointer{
+    data:String
+}
+
+impl Drop for MyPointer {
+    fn drop(&mut self) {
+        println!("Cleaning your pointer `{}` !", self.data);
+    }
+}
+
 
 struct MyBox<T>(T);
 impl<T> MyBox<T>{
@@ -15,7 +25,6 @@ impl<T> MyBox<T>{
         MyBox(x)
     }
 }
-
 impl<T> Deref for MyBox<T> {
     type Target = T;
 
@@ -32,12 +41,31 @@ fn box_learning(){
 
 
     let x = 5;
-    let y = Box::new(x);
+    let y = MyBox::new(x);
     assert_eq!(5,x);
     assert_eq!(5,*y);
 }
 
 
+#[allow(unused)]
+fn greets(name:&str){
+    println!("Hey,{}",name)
+}
+
+
+fn testing_drop(){
+    let c = MyPointer{
+        data: String::from("CCCC")
+    };
+    let d= MyPointer{
+        data: String::from("hello again")
+    };
+    println!("pointers created");
+    drop(c);
+    println!("Released")
+}
+
+
 fn main() {
-    box_learning()
+    testing_drop()
 }
