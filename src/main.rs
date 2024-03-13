@@ -57,6 +57,7 @@ fn testing_drop(){
     let c = MyPointer{
         data: String::from("CCCC")
     };
+    #[allow(unused_variables)]
     let d= MyPointer{
         data: String::from("hello again")
     };
