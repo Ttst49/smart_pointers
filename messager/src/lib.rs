@@ -34,3 +34,36 @@ impl<'a, T> LimitTracker<'a,T>
 
     }
 }
+
+#[cfg(test)]
+mod tests{
+    use super::*;
+
+    struct MessengerMock{
+        sent_messages: Vec<String>,
+    }
+
+    impl MessengerMock{
+        fn new()->MessengerMock{
+            MessengerMock{
+                sent_messages:vec![],
+            }
+        }
+    }
+
+    impl Messenger for MessengerMock {
+        fn send(&self, message: &str) {
+            self.sent_messages.push(String::from(message));
+        }
+    }
+
+
+    #[test]
+    fn send_warning_message_over_75_percent(){
+        let messenger_mock = MessengerMock::new();
+        let mut tracker = LimitTracker::new(&messenger_mock,100);
+        tracker.set_value(80);
+        assert_eq!(messenger_mock.sent_messages.len(),1)
+    }
+
+}
