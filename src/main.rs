@@ -1,10 +1,10 @@
 use crate::List::{Cons, Nil};
 use::std::ops::Deref;
-
+use std::rc::Rc;
 
 #[derive(Debug)]
 enum List{
-    Cons(i64,Box<List>),
+    Cons(i64,Rc<List>),
     Nil,
 }
 
@@ -35,8 +35,8 @@ impl<T> Deref for MyBox<T> {
 
 #[allow(unused)]
 fn box_learning(){
-    let b = Box::new(5);
-    let list = Cons(1, Box::new(Cons(2, Box::new(Cons(3, Box::new(Nil))))));
+    let b = Rc::new(5);
+    let list = Cons(1, Rc::new(Cons(2, Rc::new(Cons(3, Rc::new(Nil))))));
     println!("list={:?}",list);
 
 
@@ -65,7 +65,20 @@ fn testing_drop(){
     println!("Released")
 }
 
+#[allow(unused)]
+fn multi_references_lists(){
+    let a = Rc::new(Cons(5, Rc::new(Cons(10, Rc::new(Nil)))));
+    println!("count after a creation = {}", Rc::strong_count(&a));
+    let b = Cons(3, Rc::clone(&a));
+    println!("count after b creation = {}", Rc::strong_count(&a));
+    {
+        let c = Cons(4, Rc::clone(&a));
+        println!("count after c creation = {}", Rc::strong_count(&a));
+    }
+    println!("count after c has been released = {}", Rc::strong_count(&a));
+}
+
 
 fn main() {
-    testing_drop()
+    multi_references_lists()
 }
