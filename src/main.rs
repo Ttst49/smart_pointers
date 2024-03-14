@@ -53,6 +53,7 @@ fn greets(name:&str){
 }
 
 
+#[allow(unused)]
 fn testing_drop(){
     let c = MyPointer{
         data: String::from("CCCC")
