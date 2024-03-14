@@ -1,3 +1,4 @@
+workspace = { members = ["messager"] }
 [package]
 name = "smart_pointers"
 version = "0.1.0"
